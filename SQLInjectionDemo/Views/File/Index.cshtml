@@ -1,0 +1,89 @@
+﻿@model FilesViewModel
+
+<form asp-action="Add" asp-controller="File" method="post" enctype="multipart/form-data" class="form-row">
+    <div class="col-md-8">
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" id="uploadedFile" name="uploadedFile">
+            <label class="custom-file-label" for="uploadedFile" id="uploadedFileLabel">Choose file...</label>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <button type="submit" class="btn btn-success">Upload</button>
+    </div>
+</form>
+
+<div class="m-2">
+    <form asp-action="Index" asp-controller="File" method="get" class="form-row">
+        <div class="col-md-8">
+            <input class="form-control" name="search" value="@Model.Search">
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-success">Search</button>
+        </div>
+    </form>
+</div>
+
+@if (Model.Files.Count() > 0)
+{
+    <table class="table table-bordered table-striped table-sm table-responsive-lg">
+        <thead>
+            <tr>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Content Type
+                </th>
+                <th>
+                    Size
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var file in Model.Files)
+            {
+                <tr>
+                    <td>
+                        @file.Id
+                    </td>
+                    <td>
+                        @file.Name
+                    </td>
+                    <td>
+                        @file.ContentType
+                    </td>
+                    <td>
+                        @(file.Content?.LongLength ?? 0)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Download", "Get", "File", new { id = file.Id }),
+
+                        @Html.ActionLink("Remove", "Delete", "File", new { id = file.Id }, new { style = "color: red" })
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+
+@section Scripts {
+
+    <script>
+        window.addEventListener("load", function () {
+            var fileInput = document.getElementById('uploadedFile');
+            var filelabel = document.getElementById('uploadedFileLabel');
+            fileInput.addEventListener('change', function (ev) {
+                filelabel.innerHTML = fileInput.files[0].name;
+            });
+        });
+    </script>
+
+}

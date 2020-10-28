@@ -1,0 +1,1 @@
+SELECT Id, UserId, Name, Content FROM dbo.Files WHERE Name LIKE '%Test%'
